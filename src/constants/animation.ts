@@ -2,7 +2,7 @@ export const childDivAnimations = {
   hidden: { opacity: 0, y: 100 },
   show: (index: number) => ({
     opacity: 1,
-    transition: { delay: index * 0.4 },
+    transition: { delay: index * 0.2 },
     y: 0
   }),
 };
