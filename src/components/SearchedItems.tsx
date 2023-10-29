@@ -19,7 +19,7 @@ export default function SearchedItems(props: TProps) {
         initial="hidden"
         animate="show"
         custom={index}
-        className="w-[27vw] h-[70vh] border-2 border-zinc-500 p-3 rounded-xl space-y-7 flex flex-col items-center justify-center text-center"
+        className="w-[27vw] h-fit border-2 border-zinc-500 p-3 rounded-xl space-y-7 flex flex-col items-center justify-center text-center"
       >
         <div className="">
           <h1 className="text-2xl font-bold mb-5">{Title}</h1>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, ChangeEvent, useRef } from "react"
+import { useState, useEffect, ChangeEvent, useCallback } from "react"
 import { motion } from "framer-motion";
 
 import { headingAnimation } from "@/components/animation";
@@ -8,24 +8,26 @@ import SearchedItems from "@/components/SearchedItems";
 
 
 export default function Home() {
-  const [movieData, setMovieData] = useState<TMovie[]>([]);
+  const [movieOrSeriesData, setMovieOrSeriesData] = useState<TMovie[]>([]);
   const [searchItem, setSearchItem] = useState<string>("");
+  const [type, setType] = useState<string>("movies")
 
 
   // side effect to fetch data from api everytime page is rendered.
   useEffect(() => {
-    async function getMovies() {
-      await fetch("/api/getMovie")  // fetching data from api route handler for optimization
+    async function getMoviesOrSeries() {
+      await fetch(`/api/get${type}`)
         .then((resp) => resp.json())
-        .then((data) => setMovieData(data.data.Search))
+        .then((data) => setMovieOrSeriesData(data.data.Search))
+        .catch((error) => console.log(error))
     }
-    getMovies();
-  }, [])
+    getMoviesOrSeries();
+  }, [type])
 
 
   // Array retrieved after searching items from search box.
-  const searchedFilteredItems = movieData.filter((movie) => {
-    return movie.Title.toLowerCase().includes(searchItem.trim().toLowerCase())
+  const searchedFilteredItems =  movieOrSeriesData.filter((data) => {
+    return data.Title.toLowerCase().includes(searchItem.trim().toLowerCase())
   })
 
 
@@ -35,7 +37,7 @@ export default function Home() {
       <nav className="py-6 px-8 border-b-2 border-zinc-600 flex flex-row items-center justify-around">
         <h1 className="text-black text-2xl font-bold">Movies App</h1>
 
-        <div>
+        <div className="flex flex-row gap-x-4 items-center">
           <input
             type="text"
             placeholder="Search any movie or series..."
@@ -43,6 +45,18 @@ export default function Home() {
             value={searchItem}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchItem(e.target.value)}
           />
+
+          <div className="bg-gray-300 px-5 py-1 rounded-lg">
+            <label htmlFor="type">Choose type: </label>
+            <select
+              id="type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option value="series">Series</option>
+              <option value="movies">Movies</option>
+            </select>
+          </div>
         </div>
       </nav>
       {/* NAVBAR END */}
@@ -55,11 +69,16 @@ export default function Home() {
           animate="show"
           className="text-center text-4xl font-bold text-zinc-500 underline decoration-black"
         >
-          Movie Collection
+          {type === "movies" ? (
+            <span>Movie </span>
+          ) : (
+            <span>Series </span>
+          )}
+          Collection
         </motion.h1>
 
         {/* if length of array received is > 0, then only render items in screen */}
-        {movieData.length > 0 ? (
+        {movieOrSeriesData.length > 0 ? (
           searchedFilteredItems.length > 0 ? (
             <div className="grid grid-cols-3 gap-y-10 place-items-center">
               {searchedFilteredItems.map((data, index: number) => (
@@ -78,8 +97,8 @@ export default function Home() {
             <h1 className="text-center text-2xl font-semibold">No items matched...</h1>
           )
         ) : (
-          <h1 className="text-center text-3xl font-bold">Loading...</h1>
           // "Loading" text when data is being fetched
+          <h1 className="text-center text-3xl font-bold">Loading...</h1>
         )}
       </section>
     </>
