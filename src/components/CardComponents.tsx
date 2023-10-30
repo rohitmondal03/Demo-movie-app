@@ -47,22 +47,23 @@ export default function CardComponents(props: TProps) {
         initial="hidden"
         animate="show"
         custom={index}
-        className="w-[27vw] h-fit border-2 border-zinc-500 p-3 rounded-xl space-y-7 flex flex-col items-center justify-center text-center backdrop-blur-[100px] backdrop-brightness-[0.95] shadow-zinc-500 shadow-[20px_20px_30px] transition ease-out hover:shadow-[0px_0px_20px] hover:translate-x-16 hover:translate-y-16"
+        // sm:backdrop-brightness-[.95]
+        className="backdrop-blur-3xl bg-opacity-5 backdrop-brightness-95 sm:backdrop-brightness-[.95] text-center border-2 border-zinc-500 shadow-[0px_0px_40px] p-2 rounded-xl space-y-5 bg-white"
       >
         <div className="space-y-1">
           <h1 className="text-2xl font-bold mb-5">{original_title}</h1>
           <h1><span className="font-bold">Released:</span> {release_date}</h1>
           <h1><span className="font-bold">Popularity:</span> {popularity}</h1>
-          <h1><span className="font-bold">Overview:</span> {overview}</h1>
+          <h1><span className="font-bold">Overview:</span> {overview.slice(0, 250)}</h1>
           <h1><span className="font-bold">Vote average:</span> {vote_average}</h1>
           <h1><span className="font-bold">Vote Count:</span> {vote_count}</h1>
         </div>
 
-        <div className="space-x-3">
+        <div className="space-x-3 space-y-2">
           {genreList.map((genre, idx: number) => (
             <span
               key={idx}
-              className="border-2 border-red-600 rounded-lg p-1"
+              className="border-2 border-red-600 rounded-lg p-1 inline-block"
             >
               {genre}
             </span>

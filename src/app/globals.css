@@ -7,4 +7,6 @@ body {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-}
+  @apply h-screen lg:h-fit;
+} 
+
